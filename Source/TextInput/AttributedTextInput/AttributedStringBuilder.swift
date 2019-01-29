@@ -7,7 +7,7 @@
 
 import Foundation
 
-class AttributedStringConstructor {
+class AttributedStringBuilder {
   // MARK: - Fields
   /// Dictionary of attributes with ranges, separate attributes apply to relevant range
   private var attributesWithRange = [NSRange: [NSAttributedString.Key: Any]]()
@@ -20,12 +20,11 @@ class AttributedStringConstructor {
    
    - Returns: String with attributes, that contains in attributes dictionaries
    */
-  func attributedStringWithAttributes(
-    newValue: String?, commonAttributes: [NSAttributedString.Key: Any]?) -> NSAttributedString? {
-    guard let newValue = newValue else { return nil }
+  func buildAttributedString(from value: String?, with attributes: [NSAttributedString.Key: Any]?) -> NSAttributedString? {
+    guard let newValue = value else { return nil }
     var newAttributedValue = NSMutableAttributedString(
       string: newValue,
-      attributes: commonAttributes
+      attributes: attributes
     )
     appendAttributesWithRange(toString: &newAttributedValue, newValue: newValue)
     return newAttributedValue
@@ -70,7 +69,7 @@ class AttributedStringConstructor {
 }
 
 // MARK: - Private
-private extension AttributedStringConstructor {
+private extension AttributedStringBuilder {
   /**
    Append attributesWithRange to string, that get in parameters
    

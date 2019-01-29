@@ -13,8 +13,13 @@ open class AttributedTextInputField: UITextField {
   // MARK: - Fields
   /// Overriden text, that set text with attributes to attributedText property
   override open var text: String? {
-    set { super.attributedText = attributedStringConstructor.attributedStringWithAttributes(
-      newValue: newValue, commonAttributes: defaultTextAttributes) }
+    set {
+        super.attributedText = stringBuilder.buildAttributedString(
+            from: newValue,
+            with: defaultTextAttributes
+        )
+        sendActions(for: .editingChanged)
+    }
     get { return super.attributedText?.string }
   }
   
@@ -26,7 +31,7 @@ open class AttributedTextInputField: UITextField {
   }
   
   /// String constructor, that contain dictionaries of attributes, that will apply for input text
-  private let attributedStringConstructor = AttributedStringConstructor()
+  private let stringBuilder = AttributedStringBuilder()
 
   // MARK: - open
   
@@ -38,7 +43,7 @@ open class AttributedTextInputField: UITextField {
      - range: Range in string, that will format will attributes
    */
   open func addAttributes(_ newAttributes: [NSAttributedString.Key: Any], range: NSRange) {
-    attributedStringConstructor.addAttributes(newAttributes, range: range)
+    stringBuilder.addAttributes(newAttributes, range: range)
   }
   
   /**
@@ -49,11 +54,11 @@ open class AttributedTextInputField: UITextField {
      - range: Range, that was set with attribute, range is a key for remove
    */
   open func removeAttribute(_ attribute: NSAttributedString.Key, range: NSRange) {
-    attributedStringConstructor.removeAttribute(attribute, range: range)
+    stringBuilder.removeAttribute(attribute, range: range)
   }
   
   /// Remove all attributes
   open func removeAllAttributes() {
-    attributedStringConstructor.removeAllAttributes()
+    stringBuilder.removeAllAttributes()
   }
 }
