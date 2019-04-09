@@ -15,8 +15,8 @@ open class AttributedTextInputView: UITextView {
   override open var text: String! {
     set {
       if !typingAttributes.isEmpty {
-        super.attributedText = attributedStringConstructor.attributedStringWithAttributes(
-          newValue: newValue, commonAttributes: typingAttributes)
+        super.attributedText = stringBuilder.buildAttributedString(
+          from: newValue, with: typingAttributes)
       } else {
         super.text = newValue
       }
@@ -31,14 +31,14 @@ open class AttributedTextInputView: UITextView {
   }
   
   /// Common attributes for all string during typing
-  private var commonAttributes = [String : Any]()
-  override open var typingAttributes: [String : Any] {
+  private var commonAttributes = [NSAttributedString.Key : Any]()
+  override open var typingAttributes: [NSAttributedString.Key : Any] {
     set { commonAttributes = newValue }
     get { return commonAttributes }
   }
   
   /// String constructor, that contain dictionaries of attributes, that will apply for input text
-  private let attributedStringConstructor = AttributedStringConstructor()
+  private let stringBuilder = AttributedStringBuilder()
   
   // MARK: - open
   
@@ -49,8 +49,8 @@ open class AttributedTextInputView: UITextView {
      - newAttributes: Dictionary of attributes with values
      - range: Range in string, that will format will attributes
    */
-  open func addAttributes(_ newAttributes: [NSAttributedStringKey: Any], range: NSRange) {
-    attributedStringConstructor.addAttributes(newAttributes, range: range)
+  open func addAttributes(_ newAttributes: [NSAttributedString.Key: Any], range: NSRange) {
+    stringBuilder.addAttributes(newAttributes, range: range)
   }
   
   /**
@@ -60,12 +60,12 @@ open class AttributedTextInputView: UITextView {
      - attribute: Attribute, that will remove
      - range: Range, that was set with attribute, range is a key for remove
    */
-  open func removeAttribute(_ attribute: NSAttributedStringKey, range: NSRange) {
-    attributedStringConstructor.removeAttribute(attribute, range: range)
+  open func removeAttribute(_ attribute: NSAttributedString.Key, range: NSRange) {
+    stringBuilder.removeAttribute(attribute, range: range)
   }
   
   /// Remove all attributes
   open func removeAllAttributes() {
-    attributedStringConstructor.removeAllAttributes()
+    stringBuilder.removeAllAttributes()
   }
 }
