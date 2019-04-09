@@ -247,7 +247,7 @@ open class SumTextFormatter: TextFormatterProtocol {
         var integerPart = ""
         
         if string.contains(decimalSeparator) {
-            guard let position = string.index(of: decimalSeparator.first ?? ".") else { return string }
+            guard let position = string.firstIndex(of: decimalSeparator.first ?? ".") else { return string }
             decimalPart = String(string[position..<string.endIndex])
             integerPart = String(string[string.startIndex..<position])
         } else {
